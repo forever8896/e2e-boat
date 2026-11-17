@@ -37,7 +37,7 @@ You need Node 22.22 or newer, e2e 0.23.1 or newer with `@e2e-dev/web` 0.16.0 or 
 The package is not on npm yet. Install it from this repository:
 
 ```sh
-npm install --save-dev github:forever8896/e2e-boat
+npm install --save-dev https://github.com/forever8896/e2e-boat/tarball/main
 ```
 
 ## Options

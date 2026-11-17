@@ -27,8 +27,7 @@
     "build": "rm -rf dist && tsc --project tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "node --test test/*.test.ts",
-    "example": "cd example && e2e run",
-    "prepare": "npm run build"
+    "example": "cd example && e2e run"
   },
   "peerDependencies": {
     "@e2e-dev/web": ">=0.16.0 <1",
