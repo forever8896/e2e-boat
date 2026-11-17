@@ -1,0 +1,50 @@
+{
+  "name": "e2e-boat",
+  "version": "0.1.0",
+  "description": "Boat sandboxes as browsers for e2e: run web tests in Chrome on a Boat sandbox, including against localhost",
+  "keywords": [
+    "e2e",
+    "end-to-end",
+    "testing",
+    "boat",
+    "sandbox",
+    "cloud-browsers",
+    "browser-provider",
+    "chromium"
+  ],
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc --project tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.ts",
+    "example": "cd example && e2e run",
+    "prepare": "npm run build"
+  },
+  "peerDependencies": {
+    "@e2e-dev/web": ">=0.16.0 <1",
+    "e2e": ">=0.23.1 <1"
+  },
+  "devDependencies": {
+    "@e2e-dev/web": "0.16.0",
+    "@types/node": "^24.0.0",
+    "e2e": "0.23.1",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": ">=22.22.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forever8896/e2e-boat.git"
+  }
+}

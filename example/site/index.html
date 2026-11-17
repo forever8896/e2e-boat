@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Harbour log</title>
+<style>
+  :root { --ink: #16324a; --sea: #dff1fb; --foam: #ffffff; --buoy: #ff6b4a; --kelp: #1f9d77; --mist: #6b859a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; font: 17px/1.5 ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif; color: var(--ink);
+    background: linear-gradient(180deg, #f4fbff 0%, var(--sea) 100%); display: grid; place-items: start center; padding: 56px 16px; }
+  main { width: min(720px, 100%); }
+  header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 20px; }
+  h1 { margin: 0; font-size: 40px; letter-spacing: -0.02em; }
+  #count { color: var(--mist); font-weight: 600; }
+  form { display: flex; gap: 10px; margin-bottom: 18px; }
+  input { flex: 1; padding: 14px 16px; border: 2px solid #c5e2f2; border-radius: 14px; font: inherit; color: inherit; background: var(--foam); }
+  input:focus { outline: none; border-color: var(--ink); }
+  button { padding: 14px 20px; border: 0; border-radius: 14px; font: inherit; font-weight: 700; cursor: pointer; }
+  .add { background: var(--ink); color: var(--foam); }
+  ul { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 10px; }
+  li { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--foam); border-radius: 16px; box-shadow: 0 6px 18px rgba(22, 50, 74, 0.08); }
+  li .name { flex: 1; font-weight: 700; }
+  li .state { font-size: 14px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: #e3f6ef; color: var(--kelp); }
+  li.gone .state { background: #ffe9e3; color: var(--buoy); }
+  li.gone .name { color: var(--mist); }
+  li button { background: #eef6fb; color: var(--ink); padding: 8px 14px; border-radius: 10px; }
+  li.gone button { visibility: hidden; }
+  .export { background: var(--foam); color: var(--ink); border: 2px solid #c5e2f2; }
+  footer { margin-top: 26px; color: var(--mist); font-size: 14px; }
+</style>
+<main>
+  <header>
+    <h1>Harbour log</h1>
+    <span id="count" data-testid="count"></span>
+  </header>
+  <form id="form">
+    <input id="name" aria-label="Boat name" placeholder="Name of the boat" autocomplete="off" />
+    <button class="add">Add boat</button>
+  </form>
+  <ul id="list" aria-label="Boats"></ul>
+  <button class="export" id="export">Download the log</button>
+  <footer>Served from <b id="origin"></b></footer>
+</main>
+<script>
+  const boats = [{ name: 'Albatross', gone: false }, { name: 'Marigold', gone: false }];
+  const list = document.getElementById('list');
+  function draw() {
+    list.replaceChildren(...boats.map((boat) => {
+      const li = document.createElement('li');
+      li.className = boat.gone ? 'gone' : '';
+      li.setAttribute('aria-label', boat.name);
+      li.innerHTML = '<span class="name"></span><span class="state"></span><button></button>';
+      li.querySelector('.name').textContent = boat.name;
+      li.querySelector('.state').textContent = boat.gone ? 'Departed' : 'In harbour';
+      const button = li.querySelector('button');
+      button.textContent = 'Cast off';
+      button.setAttribute('aria-label', 'Cast off ' + boat.name);
+      button.onclick = () => { boat.gone = true; draw(); };
+      return li;
+    }));
+    const here = boats.filter((boat) => !boat.gone).length;
+    document.getElementById('count').textContent = here + (here === 1 ? ' boat in harbour' : ' boats in harbour');
+  }
+  document.getElementById('form').onsubmit = (event) => {
+    event.preventDefault();
+    const input = document.getElementById('name');
+    if (input.value.trim() === '') return;
+    boats.push({ name: input.value.trim(), gone: false });
+    input.value = '';
+    draw();
+  };
+  document.getElementById('export').onclick = () => {
+    const csv = 'boat,state\n' + boats.map((boat) => boat.name + ',' + (boat.gone ? 'departed' : 'in harbour')).join('\n') + '\n';
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    link.download = 'harbour-log.csv';
+    link.click();
+  };
+  document.getElementById('origin').textContent = location.host;
+  draw();
+</script>
+</html>

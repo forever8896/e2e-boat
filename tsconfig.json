@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES2023", "module": "NodeNext", "moduleResolution": "NodeNext",
+    "strict": true, "exactOptionalPropertyTypes": true, "noUncheckedIndexedAccess": true,
+    "allowImportingTsExtensions": true, "rewriteRelativeImportExtensions": true, "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true, "skipLibCheck": true, "noEmit": true, "types": ["node"]
+  },
+  "include": ["src", "test", "example/*.ts", "example/tests"]
+}
